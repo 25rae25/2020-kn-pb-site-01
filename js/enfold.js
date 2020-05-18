@@ -18,6 +18,8 @@ $(".bt-lines").click(function(){
 		$(this).find(".line").eq(0).css("animation-name", "line1");
 		$(this).find(".line").eq(1).css("animation-name", "line2");
 		$(this).find(".line").eq(2).css("animation-name", "line3");
+		$(".wing-wrap").stop().css("display","block").animate({"opacity":0.3},500);
+		$(".wing-rt").stop().animate({"right":0, "opacity":1}, 500);
 	}
 });
 
