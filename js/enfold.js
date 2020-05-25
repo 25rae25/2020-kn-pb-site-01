@@ -1,5 +1,36 @@
 /*********** 사전지식 ***********/
+/*
+for(var i=0; i<$(".loader").length; i++) {
+	console.log(	$(".loader").eq(i).parent()	);
+	console.log(	$(".loader").eq(i).parents()	);
+}
 
+loaderInit();
+function loaderInit() {
+	$(".loader-wrap").each(function(){
+		var $loaderWrap = $(this);
+		var $loader = $(this).find(".loader");
+		var $img = $(this).find("img");
+		console.log(	$img.eq(0).height(), $img.eq(1).height()	);
+		var len = $img.length;	//2
+		var cnt = 0;
+		$loader.show();
+		$img.on("load", function(){
+			cnt++;
+			if(cnt == len) {
+				console.log(	$img.eq(0).height(), $img.eq(1).height()	);
+				$loader.hide();
+				// main-wrap을 위한 곳
+				if($loaderWrap.hasClass("main-wrap")) {
+					mainInit();
+					mainPagerInit();
+					onMainLeave();
+				}
+			}
+		});
+	});
+}
+*/
 
 /*********** 전역변수 ***********/
 var scTop = 0;
@@ -12,9 +43,15 @@ var mainSpeed = 500;
 var mainGap = 3000;
 var mainInterval;
 var mainPager = {off: '○', on: '●'};
-mainInit();
-mainPagerInit();
-onMainLeave();
+
+var $aboutSlide = $(".about-wrap .slide");
+var aboutNow = 0;
+var aboutLast = $aboutSlide.length - 1;
+var aboutInterval; 
+var aboutGap = 4000;
+aboutInit();
+onAboutLeave();
+
 
 /*********** 사용자정의 ***********/
 function mainInit() {
@@ -40,6 +77,20 @@ function mainAni() {
 	.animate({"opacity": 1}, mainSpeed, mainInit);
 }
 
+function pfResize() {
+	var imgHeight = $(".pf").eq(0).find("img").height();
+	$(".pf").height(imgHeight * 0.8);
+	$(".pf").find("img").css("margin-top", (-imgHeight * 0.1)+"px");
+}
+
+function aboutInit() {
+	$(".about-slide").height($aboutSlide.eq(0).height());
+}
+
+function aboutAni() {
+	$aboutSlide.css("opacity", 0);
+	$aboutSlide.eq(aboutNow).css("opacity", 1);
+}
 
 /*********** 이벤트콜백 ***********/
 function onWingClick() {
@@ -64,6 +115,8 @@ function onWingClick() {
 }
 
 function onResize() {
+	pfResize();
+	aboutInit();
 	// mobile -> pc
 	if($(this).outerWidth()	>= 768) {
 		isWingShow = true;
@@ -109,6 +162,50 @@ function onMainLeave() {
 	mainInterval = setInterval(onMainNext, mainGap);
 }
 
+function onMainLoaded(){
+	$(this.elements[0]).find(".loader").hide();
+	mainInit();
+	mainPagerInit();
+	onMainLeave();
+}
+
+function onPfsLoaded(){
+	pfResize();
+	$(this.elements[0]).masonry({
+		itemSelector: '.pf',
+		columnWidth: '.pf-sizer',
+		percentPosition: true
+	});
+}
+
+function onAboutPrev() {
+	aboutNow = (aboutNow == 0) ? aboutLast: aboutNow - 1;
+	aboutAni();
+}
+
+function onAboutNext() {
+	aboutNow = (aboutNow == aboutLast) ? 0: aboutNow + 1;
+	aboutAni();
+}
+
+
+function onAboutHover() {
+	clearInterval(aboutInterval);
+}
+
+function onAboutLeave() {
+	mainInterval = setInterval(onAboutNext, aboutGap);
+}
+
+
+function onTwitterClick() {
+	// 1. 현재창에 링크
+	// location.href = '//twitter.com';
+
+	// 2. 새창에 링크
+	window.open('//twitter.com');
+}
+
 /*********** 이벤트등록 ***********/
 $(".bt-wing").click(onWingClick);
 $(window).resize(onResize);
@@ -117,3 +214,12 @@ $(window).scroll(onScroll);
 $(".main-wrap .bt-prev").click(onMainPrev);
 $(".main-wrap .bt-next").click(onMainNext);
 $(".main-wrap").hover(onMainHover, onMainLeave);
+$(".main-wrap").imagesLoaded(onMainLoaded);
+
+$(".pf-wrap .pfs").imagesLoaded(onPfsLoaded);
+
+$(".about-slide .bt-prev").click(onAboutPrev);
+$(".about-slide .bt-next").click(onAboutNext);
+$(".about-slide").hover(onAboutHover, onAboutLeave);
+
+$(".footer .twitter").click(onTwitterClick);
