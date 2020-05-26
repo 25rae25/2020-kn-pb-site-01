@@ -3,12 +3,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Economica&display=swap');
 
-body {font-family: 'Open Sans', sans-serif;}
+body {height: 5000px; font-family: 'Open Sans', sans-serif;}
 .wrapper {max-width: 1200px; margin: auto; padding-top: 7.5rem;}
 .wrapper-small {padding: 4rem;}
 .loader {font-size: 2rem; color: #99f3d8; position: absolute; top: calc(50% - 1rem); left: calc(50% - 1rem); z-index: 9999;}
 .divide {border-bottom: 1px solid #ddd; width: 60px; margin: 50px auto;}
 .content-wrap > .title {font-size: 1.5rem; text-align: center; font-weight: normal; margin:100px 0 50px 0;}
+
 
 /************ header **************/
 /* .header {border: 1px solid red; padding: 0 100px; display: flex; justify-content: space-between; align-items: center;}
@@ -59,7 +60,7 @@ body {font-family: 'Open Sans', sans-serif;}
 .slogan-wrap .content {float: left; width: 50%; padding-right: 4rem;}
 
 /************ pf-wrap **************/
-.pf-wrap > .pfs {width: 102%; margin-left: -1%;}
+.pf-wrap > .pfs {width: 102%; margin-left: -1%; perspective: 800px;}
 .pf-wrap .pf, 
 .pf-wrap .pf-sizer {position: relative; width: 31.3333%; margin: 1%; float: left; overflow: hidden;}
 
@@ -79,13 +80,12 @@ body {font-family: 'Open Sans', sans-serif;}
 .about-slide .slide:first-child {opacity: 1;}
 .about-slide .writer {margin-top: 3rem; color: #333;}
 .about-slide .bt {font-size: 6rem; color: #aaa; font-family: 'Economica', sans-serif; position: absolute; top: 0; cursor: pointer; transition: all 1s; opacity: 0.2;}
-.about-slide:hover .bt {opacity: 0.8;} 
+.about-slide:hover .bt {opacity: 0.8;}
 .about-slide .bt-prev {left: 2rem;}
 .about-slide .bt-next {right: 2rem;}
 
 
 /************ footer-wrap **************/
-
 .footer {margin-top: 8rem;}
 .footer .info {width: 33.3333%; float: left; padding-right: 5%;}
 .footer h4.title {padding: 1rem 0; color: #444;}
@@ -97,20 +97,23 @@ body {font-family: 'Open Sans', sans-serif;}
 .footer .links {margin-top: 2rem;}
 .footer .link {float: left; width: 50%; cursor: pointer;}
 .footer .link > * {float: left;}
-.footer .link > .icon {width: 2rem; height: 2rem; text-align: center; line-height: 2rem;
-color: #fff; border-radius: 3px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); margin-right: 0.5rem;}
-.footer .link.twitter > .icon {background-color: #47c0f8;}
+.footer .link > .icon {width: 2rem; height: 2rem; text-align: center; line-height: 2rem; 	
+	color: #fff; border-radius: 3px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); 
+	margin-right: 0.5rem;}
+.footer .link.twitter > .icon {background-color: #31cfff;}
 .footer .link.rss > .icon {background-color: #ffac30;}
 .footer .link > .desc {font-size: 0.75rem; color: #444; line-height: 0.875rem;}
 .footer .link > .desc > span {font-size: 0.625rem; color: #999;}
-.footer .link:hover > .desc > span {color: #444 ;}
+.footer .link:hover > .desc > span {color: #444;}
 
 .footer .copyrights {font-size: 0.75rem; color: #999; margin-top: 4rem; padding: 1rem 0;}
-.footer  .copyright {float: left;}
-.footer  .footer-navis {float: right;}
-.footer  .footer-navis .navi {float: left; padding: 0 0.5rem;}
+.footer .copyright {float: left;}
+.footer .footer-navis {float: right;}
+.footer .footer-navis > .navi {float: left; padding: 0 0.5rem;}
 
 
+
+/************ 반응형 **************/
 @media screen and (max-width: 767px) {
 	.wrapper {padding-top: 5rem;}
 	.header {padding: 0 2.5rem;}
@@ -123,8 +126,8 @@ color: #fff; border-radius: 3px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); margi
 	.wrapper-small {padding: 7%;}
 	.pf-wrap, .about-wrap, .footer {padding: 7%;}
 	.footer .info {width: 100%; padding-right: 0; margin-bottom: 3rem;}
-	.footer  .copyright {float: left; width: 100%;}
-  .footer  .footer-navis {float: left; width: 100%;}
+	.footer .copyright {float: left; width: 100%;}
+	.footer .footer-navis {float: left; width: 100%;}
 }
 
 @media screen and (max-width: 575px) {
@@ -132,5 +135,18 @@ color: #fff; border-radius: 3px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); margi
 	.pf-wrap .pf-sizer {width: 98%;}
 }
 
+/************ 애니메이션 **************/
+.ani {animation-fill-mode: forwards; animation-duration: 1s;animation-play-state: paused;}
 
+.fadeInB {animation-name: fadeInB; opacity: 0; transform: translateY(200px); }
+@keyframes fadeInB {
+	0% {opacity: 0; transform: translateY(200px);}
+	100% {opacity: 1; transform: translateY(0);}
+}
+
+.persB {animation-name: persB; opacity: 0; transform: rotateX(-90deg);transform-style:preserve-3d; transform-origin: 0 150%;}
+@keyframes persB {
+	0% {transform: rotateX(-90deg); opacity: 0;}
+	100% {transform: rotateX(0); opacity: 1;}
+}
 

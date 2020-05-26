@@ -30,10 +30,67 @@ function loaderInit() {
 		});
 	});
 }
+ 
+// dataSet 알아보기
+// API - Application Provider Interface
+var $sample = $("#sample");
+console.log(	$sample	);
+console.log(	$sample[0]	);
+//getter
+console.log(	$sample.attr("id")	);
+console.log(	$sample.attr("class")	);
+console.log(	$sample.data("name")	);
+console.log(	$sample.data("speed")	);
+console.log(	$sample.data("booldook")	);
+console.log(	$sample.data("delay")	);
+//setter
+console.log(	$sample.attr("id", "sample2")	);
+console.log(	$sample.attr("class", "sample2")	);
+console.log(	$sample.data("name", "sample-data2")	);
+console.log(	$sample.data("speed", 5000)	);
+console.log(	$sample.data("booldook", false)	);
+console.log(	$sample.data("delay", 2000)	);
+//getter
+console.log(	$sample.attr("id")	);
+console.log(	$sample.attr("class")	);
+console.log(	$sample.data("name")	);
+console.log(	$sample.data("speed")	);
+console.log(	$sample.data("booldook")	);
+console.log(	$sample.data("delay")	);
+
+
+// 크기, 위치
+console.log(	$(".slogan-wrap").width(), $(".slogan-wrap").height()	);
+console.log(	$(".slogan-wrap").innerWidth(), $(".slogan-wrap").innerHeight()	);
+console.log(	$(".slogan-wrap").outerWidth(), $(".slogan-wrap").outerHeight()	);
+console.log(	$(".slogan-wrap").outerWidth(true), $(".slogan-wrap").outerHeight(true)	);
+// width(), height() -> margin, padding, border를 제외한 크기
+// innerWidth(), innerHeight() -> margin, border를 제외한 크기 - padding포함
+// outerWidth(), outerHeight() -> margin을 제외한 크기 - padding, border포함
+// outerWidth(true), outerHeight(true) -> margin, padding, border포함
+
+console.log(	$(".slogan-wrap").offset()	);
+console.log(	$(".slogan-wrap").position()	);
+console.log(	$(".slogan-wrap .contents").offset()	);		// margin을 제외한 거리
+console.log(	$(".slogan-wrap .contents").position()	);	// margin도 포함한 거리
+
+console.log(	$(".pf").eq(0).find(".desc").offset()	);		// 문서 끝으로 부터의 거리
+console.log(	$(".pf").eq(0).find(".desc").position()	);	// 기준점(내가 position모델일때 나의 부모)으로 부터의 거리
+
+console.log(	$(window).scrollTop()	);		// 스크롤이 되어서 문서가 얼마나 위로 올라갔는지...
+
+$(window).scroll(function () {
+	scTop = $(this).scrollTop();
+	$(".header").css("background-color", "white");
+	if(scTop > 200) $(".header").css("background-color", "beige");
+	if(scTop > 1000) $(".header").css("background-color", "orange");
+	if(scTop > 2000) $(".header").css("background-color", "red");
+});
 */
 
 /*********** 전역변수 ***********/
-var scTop = 0;
+var scTop = 0;		// $(window).scrollTop()
+var winHei = 0;		// $(window).Height()
 var isWingShow = false;
 
 var $mainSlide = $(".main-wrap .slide");
@@ -47,7 +104,7 @@ var mainPager = {off: '○', on: '●'};
 var $aboutSlide = $(".about-wrap .slide");
 var aboutNow = 0;
 var aboutLast = $aboutSlide.length - 1;
-var aboutInterval; 
+var aboutInterval;
 var aboutGap = 4000;
 aboutInit();
 onAboutLeave();
@@ -115,6 +172,7 @@ function onWingClick() {
 }
 
 function onResize() {
+	winHei = $(this).innerHeight();
 	pfResize();
 	aboutInit();
 	// mobile -> pc
@@ -130,13 +188,15 @@ function onResize() {
 }
 
 function onScroll() {
-	/*
 	scTop = $(this).scrollTop();
-	$(".header").css("background-color", "white");
-	if(scTop > 200) $(".header").css("background-color", "beige");
-	if(scTop > 1000) $(".header").css("background-color", "orange");
-	if(scTop > 2000) $(".header").css("background-color", "red");
-	*/
+	var sum = scTop + winHei;
+	$(".ani").each(function(){
+		var top = $(this).offset().top;
+		if(sum > top) {
+			if($(this).data("delay")) $(this).css("animation-delay", $(this).data("delay"));
+			$(this).css("animation-play-state", "running");
+		}
+	});	
 }
 
 function onMainPrev() {
@@ -188,15 +248,13 @@ function onAboutNext() {
 	aboutAni();
 }
 
-
 function onAboutHover() {
 	clearInterval(aboutInterval);
 }
 
 function onAboutLeave() {
-	mainInterval = setInterval(onAboutNext, aboutGap);
+	aboutInterval = setInterval(onAboutNext, aboutGap);
 }
-
 
 function onTwitterClick() {
 	// 1. 현재창에 링크
@@ -208,7 +266,7 @@ function onTwitterClick() {
 
 /*********** 이벤트등록 ***********/
 $(".bt-wing").click(onWingClick);
-$(window).resize(onResize);
+$(window).resize(onResize).trigger("resize");
 $(window).scroll(onScroll);
 
 $(".main-wrap .bt-prev").click(onMainPrev);
